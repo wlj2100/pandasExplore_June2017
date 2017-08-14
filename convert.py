@@ -45,8 +45,7 @@ def make(val):
     return getResult(val, labelList)
 
 def year(val):
-    labelList = [14, 15, 16, 17, 12, 13,  4,  8,  7,  9,  6,  5,  3, 10, 11,  2, 20,
-       90, 98,  0,  1, 99, 97, 95, 93, 89, 96, 94, 91, 92]
+    labelList = [14, 15, 16, 17, 12, 13, 10, 11]
     return getResult(val, labelList)
 
 def pl(val):
@@ -59,6 +58,18 @@ def loanTerm(val):
        46, 44, 73, 51, 64, 61, 12, 81, 53, 59, 62, 82, 88, 55, 50, 57, 45,
        56, 15, 41, 35, 67, 85, 34, 22, 33, 18, 83, 38, 29, 37, 43, 91, 26,
        19, 25, 16, 32, 20, 28, 86, 31, 14, 23, 13, 17]
+    return getResult(val, labelList)
+
+def dlrZip2(val) :
+    labelList = ['33', '34', '30', '39', '20', '29', '78', '23', '84', '32', '76',
+       '31', '75', '38', '89', '80', '21', '92', '27', '77', '94', '82',
+       '28', '85', '65', '72', '35', '88', '19', '63', '36', '40', '87',
+       '70', '37', '52', '16', '97', '43', '48', '96', '83', '59', '95',
+       '56', '62', '61', '15', '53', '17', '44', '10', '86', '18', '58',
+       '45', '98', '22', '11', '57', '14', '68', '60', '42', '50', '12',
+       '46', '81', '73', '49', '74', '79', '54', '55', '26', '13', '25',
+       '24', '47', '64', '91', '99', '90', '71', '7', '93', '67', '41',
+       '9', '66', '69', '51', '6']
     return getResult(val, labelList)
 
 def dlrZip(val):
@@ -109,6 +120,10 @@ def dlrZip(val):
        '391', '107', '599', '431', '17', '37', '384', '037', '017', '468',
        '810', '68', '67', '6', '271', '068', '006', '551', '125', '941',
        '29']
+    return getResult(val, labelList)
+
+def custZip2(val):
+    labelList = ['33', '34', '30', '39', '20', '29', '78', '23', '84', '32', '76', '31', '75', '38', '89', '80', '21', '92', '27', '77', '94', '82', '28', '85', '65', '72', '35', '88', '19', '63', '36', '40', '87', '70', '37', '52', '16', '97', '43', '48', '96', '83', '59', '95', '56', '62', '61', '15', '53', '17', '44', '10', '86', '18', '58', '45', '98', '22', '11', '57', '14', '68', '60', '42', '50', '12', '46', '81', '73', '49', '74', '79', '54', '55', '26', '13', '25', '24', '47', '64', '91', '99', '90', '71', '7', '93', '67', '41', '9', '66', '69', '51', '6']
     return getResult(val, labelList)
 
 def custZip(val):
@@ -188,9 +203,13 @@ def custZip(val):
 #        u'DLR_ZIP3', u'CUST_ZIP3', u'FND_AM_BIN', u'APR_BIN', u'AGE_BIN'],
 #       dtype='object')
 
+def mileage(val):
+    labelList = [3, 1, 5, 0, 2, 4]
+    return getResult(val, labelList)
+
 if __name__ == '__main__':
     # read origin csvs
-    df = pd.read_csv('poc_ml_data_v3_.csv')
+    df = pd.read_csv('poc_ml_data_v5.csv')
     # remove null in DLR_ZIP3
     # df[['DLR_ZIP3']] = df[['DLR_ZIP3']].apply(pd.to_numeric)
     df[['DLR_ZIP3']] = df[['DLR_ZIP3']].astype(str)
@@ -198,49 +217,69 @@ if __name__ == '__main__':
     # generate new DataFrame with keep feature
     newDf = df[['VIN', 'EWT', 'SRV', 'MNT', 'TLP', 'RHT', 'PNTP', 'ETCH', 'DENT']]
 
-    # for GENDER
-    print len(df.GENDER.unique())
-    newDf['MALE'], newDf['FEMALE'] = zip(*df['GENDER'].map(gender))
-    # for FND_AM_BIN
-    print len(df.FND_AM_BIN.unique())
-    tempDf = pd.DataFrame(data = np.array(zip(*df['FND_AM_BIN'].map(fnd))).T, columns = ['FND_AM_BIN_' + str(val) for val in df.FND_AM_BIN.unique()])
-    newDf[tempDf.columns] = tempDf
-    # for APR_BIN
-    print len(df.APR_BIN.unique())
-    tempDf = pd.DataFrame(data = np.array(zip(*df['APR_BIN'].map(apr))).T, columns = ['APR_BIN_' + str(val) for val in df.APR_BIN.unique()])
-    newDf[tempDf.columns] = tempDf
-    # for AGE_BIN
-    print len(df.AGE_BIN.unique())
-    tempDf = pd.DataFrame(data = np.array(zip(*df['AGE_BIN'].map(age))).T, columns = ['AGE_BIN_' + str(val) for val in df.AGE_BIN.unique()])
-    newDf[tempDf.columns] = tempDf
-    # for MAKE
-    print len(df.MAKE.unique())
-    tempDf = pd.DataFrame(data = np.array(zip(*df['MAKE'].map(make))).T, columns = ['MAKE_' + str(val) for val in df.MAKE.unique()])
-    newDf[tempDf.columns] = tempDf
+    # # for GENDER
+    # print len(df.GENDER.unique())
+    # newDf['MALE'], newDf['FEMALE'] = zip(*df['GENDER'].map(gender))
+    # # for FND_AM_BIN
+    # print len(df.FND_AM_BIN.unique())
+    # tempDf = pd.DataFrame(data = np.array(zip(*df['FND_AM_BIN'].map(fnd))).T, columns = ['FND_AM_BIN_' + str(val) for val in df.FND_AM_BIN.unique()])
+    # newDf[tempDf.columns] = tempDf
+    # # for APR_BIN
+    # print len(df.APR_BIN.unique())
+    # tempDf = pd.DataFrame(data = np.array(zip(*df['APR_BIN'].map(apr))).T, columns = ['APR_BIN_' + str(val) for val in df.APR_BIN.unique()])
+    # newDf[tempDf.columns] = tempDf
+    # # for AGE_BIN
+    # print len(df.AGE_BIN.unique())
+    # tempDf = pd.DataFrame(data = np.array(zip(*df['AGE_BIN'].map(age))).T, columns = ['AGE_BIN_' + str(val) for val in df.AGE_BIN.unique()])
+    # newDf[tempDf.columns] = tempDf
+    # # for MAKE
+    # print len(df.MAKE.unique())
+    # tempDf = pd.DataFrame(data = np.array(zip(*df['MAKE'].map(make))).T, columns = ['MAKE_' + str(val) for val in df.MAKE.unique()])
+    # newDf[tempDf.columns] = tempDf
     # for YEAR
     print len(df.YEAR.unique())
     tempDf = pd.DataFrame(data = np.array(zip(*df['YEAR'].map(year))).T, columns = ['YEAR_' + str(val) for val in df.YEAR.unique()])
     newDf[tempDf.columns] = tempDf
-    # for PURCHASE_LEASE
-    print len(df.PURCHASE_LEASE.unique())
-    tempDf = pd.DataFrame(data = np.array(zip(*df['PURCHASE_LEASE'].map(pl))).T, columns = ['PURCHASE_LEASE_' + str(val) for val in df.PURCHASE_LEASE.unique()])
-    newDf[tempDf.columns] = tempDf
-    # for LOAN_TERM
-    print len(df.LOAN_TERM.unique())
-    tempDf = pd.DataFrame(data = np.array(zip(*df['LOAN_TERM'].map(loanTerm))).T, columns = ['LOAN_TERM_' + str(val) for val in df.LOAN_TERM.unique()])
-    newDf[tempDf.columns] = tempDf
-    # for DLR_ZIP3
-    print len(df.DLR_ZIP3.unique())
-    tempDf = pd.DataFrame(data = np.array(zip(*df['DLR_ZIP3'].map(dlrZip))).T, columns = ['DLR_ZIP3_' + str(val) for val in df.DLR_ZIP3.unique()])
-    newDf[tempDf.columns] = tempDf
-    # for CUST_ZIP3
-    print len(df.CUST_ZIP3.unique())
-    tempDf = pd.DataFrame(data = np.array(zip(*df['CUST_ZIP3'].map(custZip))).T, columns = ['CUST_ZIP3_' + str(val) for val in df.CUST_ZIP3.unique()])
+    # # for PURCHASE_LEASE
+    # print len(df.PURCHASE_LEASE.unique())
+    # tempDf = pd.DataFrame(data = np.array(zip(*df['PURCHASE_LEASE'].map(pl))).T, columns = ['PURCHASE_LEASE_' + str(val) for val in df.PURCHASE_LEASE.unique()])
+    # newDf[tempDf.columns] = tempDf
+    # # for LOAN_TERM
+    # print len(df.LOAN_TERM.unique())
+    # tempDf = pd.DataFrame(data = np.array(zip(*df['LOAN_TERM'].map(loanTerm))).T, columns = ['LOAN_TERM_' + str(val) for val in df.LOAN_TERM.unique()])
+    # newDf[tempDf.columns] = tempDf
+
+    # # for DLR_ZIP3
+    # print len(df.DLR_ZIP3.unique())
+    # tempDf = pd.DataFrame(data = np.array(zip(*df['DLR_ZIP3'].map(dlrZip))).T, columns = ['DLR_ZIP3_' + str(val) for val in df.DLR_ZIP3.unique()])
+    # newDf[tempDf.columns] = tempDf
+
+    # for DLR_ZIP2
+    df['DLR_ZIP2'] = df['DLR_ZIP3'].astype(str).str[:2]
+    df.CUST_ZIP2.unique()
+    print len(df.CUST_ZIP2.unique())
+    tempDf = pd.DataFrame(data = np.array(zip(*df['DLR_ZIP2'].map(dlrZip2))).T, columns = ['DLR_ZIP2_' + str(val) for val in df.DLR_ZIP2.unique()])
     newDf[tempDf.columns] = tempDf
 
+    # for CUST_ZIP3
+    # print len(df.CUST_ZIP3.unique())
+    # tempDf = pd.DataFrame(data = np.array(zip(*df['CUST_ZIP3'].map(custZip))).T, columns = ['CUST_ZIP3_' + str(val) for val in df.CUST_ZIP3.unique()])
+    # newDf[tempDf.columns] = tempDf
+
+    # # for CUST_ZIP2
+    # df['CUST_ZIP2'] = df['CUST_ZIP3'].astype(str).str[:2]
+    # print len(df.CUST_ZIP2.unique())
+    # tempDf = pd.DataFrame(data = np.array(zip(*df['CUST_ZIP2'].map(custZip2))).T, columns = ['CUST_ZIP2_' + str(val) for val in df.CUST_ZIP2.unique()])
+    # newDf[tempDf.columns] = tempDf
+
+    # for MILAGE_BIN
+    print len(df.MILAGE_BIN.unique())
+    tempDf = pd.DataFrame(data = np.array(zip(*df['MILAGE_BIN'].map(mileage))).T, columns = ['MILAGE_BIN_' + str(val) for val in df.MILAGE_BIN.unique()])
+    newDf[tempDf.columns] = tempDf
+    print newDf
     # ignore
     # for model
-    print len(df.MODEL.unique())
+    # print len(df.MODEL.unique())
 
 
     newDf.to_csv('output.csv')
